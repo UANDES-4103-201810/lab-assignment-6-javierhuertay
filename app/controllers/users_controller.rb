@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_action :is_user_logged_in?
-
+  before_action :set_user, only: [:show, :edit, :update, :destroy],
+  before_action :is_user_logged_in?	
+  
   # GET /users
   # GET /users.json
   def index
@@ -25,19 +25,28 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-    #complete this method
+    @user = User.create!(user_params)
+	if @user.save
+	    	redirect_to root_path
+		flash[:notice] = "User has been created"
+	    else 
+		redirect_to registrations_path
+		flash[:notice] = "User hasn't been created"
+    	    end  
   end
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    #complete this method
+    @user = User.find(params[:id])
+    @user.update!(update_params)
+    redirect_to @user
   end
 
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    #complete this method
+ 
   end
 
   private
@@ -50,4 +59,8 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :last_name, :email, :password, :phone)
     end
+    
+    def update_params
+    params.require(:user).permit(name: true, last_name: true, email: true, password:true , phone:true)
+    end	
 end
