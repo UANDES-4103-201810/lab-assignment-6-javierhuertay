@@ -1,6 +1,5 @@
 class RegistrationsController < ApplicationController
-  include ActionController::HttpAuthentication::Basic::ControllerMethods
-  include ActionController::HttpAuthentication::Token::ControllerMethods
+  
 	def new
 	    @user = User.new
 	end
@@ -11,7 +10,7 @@ class RegistrationsController < ApplicationController
 	    	redirect_to root_path
 		flash[:notice] = "User has been created"
 	    else 
-		redirect_to registrations_path
+		redirect_to sign_in_path
 		flash[:notice] = "User hasn't been created"
     	    end
 	end

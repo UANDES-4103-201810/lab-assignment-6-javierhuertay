@@ -2,6 +2,8 @@ class User < ApplicationRecord
   	has_many :user_tickets	
 	has_many :tickets, :through => :user_tickets
 
+	has_secure_password validations: false
+
 	validates :email, presence: true, format: {with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/}, uniqueness: true
 
 	validates :phone, length: {minimum: 9, maximum: 12}, allow_blank: true
