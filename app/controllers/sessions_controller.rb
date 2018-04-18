@@ -1,23 +1,26 @@
 class SessionsController < ApplicationController
-   
 	def new
 	end
 
-	 def create
-    		user = User.find_by(email: params[:email])
-    		if user and user.authenticate(params[:password])
-      			session[:user_id] = user.id
-      			redirect_to root_path
-    		else
-    		# If user's login doesn't work, send them back to the login form.
-      			redirect_to sign_in_path
-    end
-  end
-
-	def destroy
-		#complete this method
+	def create
+		@user = User.find_by(email: params[:session][:email])
+		if @user
+			if @user.password == params[:session][:pasword]
+		  		session[:user] = @user
+				flash[:notice] = "Log in sucesfully" 
+			 	cookies.permanent.signed[:user_id] = @user.id
+				redirect_to users_path
+		else
+		  redirect_to registrations_path
+		  flash[:danger] = "Log in unsucsfully"
+		end
 	end
 
-	private
-
+	def destroy	
+	    User.find(session[:user_id]).destroy      
+	    session[:user_id] = nil         
+	    redirect_to registrations_path
+	    flash[:danger] = "User destroyed!!" 
+  	end
+end  
 end
